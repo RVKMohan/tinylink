@@ -21,6 +21,8 @@ export default function Page() {
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
   const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
+
 
 
   useEffect(() => { fetchLinks(); }, []);
@@ -59,6 +61,12 @@ export default function Page() {
   };
 
 
+  const filteredLinks = links?.filter(l =>
+    l.code.toLowerCase().includes(search.toLowerCase()) ||
+    l.url.toLowerCase().includes(search.toLowerCase())
+  );
+
+
   return (
     <div className="space-y-6 px-4 md:px-0">
       {/* FORM */}
@@ -81,7 +89,7 @@ export default function Page() {
             value={customCode}
             onChange={(e) => setCustomCode(e.target.value)}
             className="mt-1 block w-full border rounded p-2"
-            placeholder="6-8 chars A-Za-z0-9"
+            placeholder="6-8 chars A-Z a-z 0-9"
           />
         </div>
 
@@ -103,10 +111,22 @@ export default function Page() {
         <h2 className="text-lg font-medium mb-4">Links</h2>
 
         {loading && <div>Loading...</div>}
-        {!loading && links?.length === 0 && <div>No links yet</div>}
+        {!loading && filteredLinks?.length === 0 && <div>No links yet</div>}
 
         {!loading && links?.length ? (
           <div className="overflow-x-auto">
+
+            <div className="mb-4">
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search by code or URL..."
+                className="w-full md:w-1/2 border rounded p-2"
+              />
+            </div>
+
+
             <table className="w-full text-sm">
               <thead>
                 <tr className="text-left border-b">
@@ -119,7 +139,8 @@ export default function Page() {
               </thead>
 
               <tbody>
-                {links.map(l => (
+                {!loading && filteredLinks?.length === 0 && <div>No links found</div>}
+                {filteredLinks.map(l => (
                   <tr key={l.id} className="border-b">
                     <td className="py-3 pr-3">
                       <Link href={`/code/${l.code}`} className="text-blue-600 underline">
