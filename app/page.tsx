@@ -50,6 +50,12 @@ export default function Page() {
     await fetchLinks();
   };
 
+  const deleteLink = async (code: string) => {
+    if (!confirm('Delete this link?')) return;
+    await fetch(`/api/links/${code}`, { method: 'DELETE' });
+    await fetchLinks();
+  };
+
 
   return (
     <div className="space-y-6 px-4 md:px-0">
@@ -149,7 +155,7 @@ export default function Page() {
                       </a>
 
                       <button
-                        onClick={() => { }}
+                        onClick={() => { deleteLink(l.code) }}
                         className="p-1 hover:bg-red-100 rounded"
                       >
                         <Trash2 size={18} className="text-red-600" />
