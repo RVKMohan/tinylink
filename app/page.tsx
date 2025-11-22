@@ -20,6 +20,8 @@ export default function Page() {
   const [customCode, setCustomCode] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [creating, setCreating] = useState(false);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
 
   useEffect(() => { fetchLinks(); }, []);
 
@@ -138,9 +140,19 @@ export default function Page() {
                     </td>
 
                     <td className="py-3 flex items-center gap-3">
+                      {copiedId === l.id && (
+                        <span className="absolute top-8 left-1/2 -translate-x-1/2 
+                     bg-black text-white text-xs px-2 py-1 rounded shadow">
+                          Copied!
+                        </span>
+                      )}
                       <button
-                        onClick={() => { }}
-                        className="p-1 hover:bg-gray-200 rounded"
+                        onClick={() => {
+                          navigator.clipboard.writeText(`${window.location.origin}/${l.code}`);
+                          setCopiedId(l.id);
+                          setTimeout(() => setCopiedId(null), 1500);
+                        }}
+                        className="p-1 hover:bg-gray-200 rounded relative"
                       >
                         <Copy size={18} />
                       </button>
