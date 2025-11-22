@@ -1,6 +1,6 @@
 # TinyLink - Next.js Take-Home
 
-This is a complete TinyLink app (Next.js + Prisma + Tailwind). It implements the assignment's required API and pages.
+This is a complete TinyLink app (Next.js + Prisma + Tailwind). 
 
 ## Quick start
 
